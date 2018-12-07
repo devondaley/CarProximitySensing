@@ -110,7 +110,7 @@ void sendingData(int time) {
 	//char str[count];
 	//sprintf(str, "%d", i);
    
-	// Driver code  
+	// Initializing socket and buffers/data  
     int sockfd; 
     char buffer[MAXLINE]; 
     char *data[count];
@@ -132,17 +132,20 @@ void sendingData(int time) {
       
     int n; 
     socklen_t len = sizeof(servaddr);
-      
+    
+    // sending function to send the datagram to the server RPi	
     sendto(sockfd, (const char *)data, strlen(*data), 
         MSG_CONFIRM, (const struct sockaddr *) &servaddr,  
             sizeof(servaddr)); 
     printf("Hello message sent.\n"); 
-          
+    
+    // receiving function for receiving a response from the server RPi
     n = recvfrom(sockfd, (char *)buffer, MAXLINE,  
                 MSG_WAITALL, (struct sockaddr *) &servaddr, &len); 
     buffer[n] = '\0'; 
     printf("Server : %s\n", buffer); 
   
+    // closing socket after use
     close(sockfd);  
 }
 
@@ -154,16 +157,15 @@ int main(void) {
 	
 	// Run the sensor polling loop and retrieve two times
 	while(1) {
-		/*loop();
+		loop();
 		// note will be sending beginTime and endTime to the server for calculations and display on android
 		if((endTime - beginTime) <= 0) {
 			// send bad values message?
 		} else if(endTime == prev_endTime || beginTime == prev_beginTime) {
 			// time values not changed, 
+		} else {
+			sendingData(endTime-beginTime);	
 		}
-		*/
-		
-		sendingData(5000);
 		
 		// delaying the polling
 		delay(5);
