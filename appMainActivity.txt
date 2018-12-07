@@ -1,0 +1,165 @@
+package com.example.jozeftierney.dec3rdudp;
+/*
+RC Car Proximity Sensing App MainActivity file
+Author: Jozef Tierney
+Date:   Nov 4th, 2018
+
+sends UDP messages to the server based on text and button inputs from the user
+
+changeMin sends whatever value is input to the text line
+start and stop cars send 1 or 0 to the server based on which button is pressed
+*/
+
+
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import java.nio.ByteBuffer;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    //displays the main screen on app startup
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+
+    //sends the value from editText2 textbox to the server as a UDP
+    public void changeMin(View view) {
+        try {
+            //grabbing value from textbox, converts it to int
+            EditText et = (EditText)findViewById(R.id.editText2);
+            String sTextFromET = et.getText().toString();
+            int nIntFromET = new Integer(sTextFromET).intValue();
+
+            //set address to send to and create datagram
+            InetAddress serverAddr = InetAddress.getByName("192.168.137.7");
+            DatagramSocket clientSocket = new DatagramSocket();
+            byte[] sendData = new byte[1024];
+            //double sentence = 900000;
+
+            //converts input to bytes to send and generates packet then sends
+            ByteBuffer.wrap(sendData).putInt(nIntFromET);
+            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, serverAddr, 3443);
+            clientSocket.send(sendPacket);
+
+            //closes socket
+            clientSocket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //sends a 0 over UDP to the server to tell it to start the cars
+    public void startCars(View view) {
+        try {
+            //grabbing value from textbox, converts it to int
+            EditText et = (EditText)findViewById(R.id.editText2);
+            String sTextFromET = et.getText().toString();
+            int nIntFromET = 0;
+
+            //set address to send to and create datagram
+            InetAddress serverAddr = InetAddress.getByName("192.168.137.7");
+            DatagramSocket clientSocket = new DatagramSocket();
+            byte[] sendData = new byte[1024];
+            //double sentence = 900000;
+
+            //converts input to bytes to send and generates packet then sends
+            ByteBuffer.wrap(sendData).putInt(nIntFromET);
+            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, serverAddr, 3443);
+            clientSocket.send(sendPacket);
+
+            //closes socket
+            clientSocket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //sends a 1 over UDP to the server to tell it to stop the cars
+    public void stopCars(View view) {
+        try {
+            //grabbing value from textbox, converts it to int
+            EditText et = (EditText)findViewById(R.id.editText2);
+            String sTextFromET = et.getText().toString();
+            int nIntFromET = 1;
+
+            //set address to send to and create datagram
+            InetAddress serverAddr = InetAddress.getByName("192.168.137.7");
+            DatagramSocket clientSocket = new DatagramSocket();
+            byte[] sendData = new byte[1024];
+            //double sentence = 900000;
+
+            //converts input to bytes to send and generates packet then sends
+            ByteBuffer.wrap(sendData).putInt(nIntFromET);
+            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, serverAddr, 3443);
+            clientSocket.send(sendPacket);
+
+            //closes socket
+            clientSocket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    /*
+    //sends a 1 over UDP to the server to tell it to stop the cars
+    public void stopCars(View view) {
+        try {
+
+            //set address to send to and create datagram
+            InetAddress serverAddr = InetAddress.getByName("192.168.137.7");
+            DatagramSocket clientSocket = new DatagramSocket();
+            byte[] sendData = new byte[1024];
+            int sentence = 1;
+
+            //converts input to bytes to send and generates packet then sends
+            ByteBuffer.wrap(sendData).putInt(sentence);
+            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, serverAddr, 3443);
+            clientSocket.send(sendPacket);
+
+            //closes socket
+            clientSocket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    */
+}
+
+
+
+
+
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.jozeftierney.dec3rdudp">
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"></uses-permission>
+    <application
+
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
